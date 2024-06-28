@@ -1,6 +1,15 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
+import { getRandomUser } from "./serverActions/action";
 
 const UserTable = () => {
+  const getUser = async () => {
+    const user = await getRandomUser();
+    console.log({ user });
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <div>
       <table className="w-full ">
