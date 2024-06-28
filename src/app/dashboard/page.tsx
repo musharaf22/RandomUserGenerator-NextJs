@@ -5,10 +5,7 @@ import UserTable from "./UserTable";
 const Dashboard = () => {
   return (
     <div>
-      <Navbar />
-      <div className="border-2 border-red-500">
-        <UserTable />
-      </div>
+      <UserTable />
     </div>
   );
 };
