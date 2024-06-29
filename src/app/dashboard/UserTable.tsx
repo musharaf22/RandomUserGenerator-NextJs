@@ -5,6 +5,7 @@ import RefreshIcon from "@/utils/logo/RefreshIcon";
 import SortingIcon from "@/utils/logo/SortingIcon";
 import { useEffect, useState } from "react";
 import { addUser, getAllUser } from "./serverActions/action";
+import Swal from "sweetalert2";
 
 interface IUser {
   id: string;
@@ -18,9 +19,11 @@ interface IUser {
   updatedAt: string;
 }
 const UserTable = () => {
+  //states
   const [user, setUser] = useState<IUser[] | []>([]);
+  const [page, setPage] = useState<number>(1);
   const getUser = async () => {
-    const user = await getAllUser({ page: 1, limit: 10 });
+    const user = await getAllUser({ page, limit: 10 });
     if (user) {
       setUser(user.data);
     }
@@ -38,6 +41,27 @@ const UserTable = () => {
       await getUser();
       el.classList.remove("animate-spin");
     }
+  };
+
+  // handle delete
+  const handleDelete = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "black",
+      cancelButtonColor: "gray",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   };
   return (
     <div className="border-2 border-gray-500 rounded-xl p-4">
@@ -106,7 +130,10 @@ const UserTable = () => {
                   <button className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
                     Edit
                   </button>
-                  <button className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black hover:border-2 w-[70px]">
+                  <button
+                    onClick={handleDelete}
+                    className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black hover:border-2 w-[70px]"
+                  >
                     Delete
                   </button>
                 </div>
@@ -115,8 +142,15 @@ const UserTable = () => {
           );
         })}
       </table>
-      <div className="flex justify-end">
-        <Paginations currPage={1} noOfPages={10} />
+      <div
+        className={`${user.length === 0 ? "hidden" : "block"} flex justify-end`}
+      >
+        <Paginations
+          currPage={page}
+          noOfPages={10}
+          setPageId={setPage}
+          refetch={getUser}
+        />
       </div>
     </div>
   );
