@@ -11,21 +11,25 @@ export async function GET(req: Request) {
     searchParams.get("sortValue") ?? null,
   ];
 
-  const allUser = await prisma.user.findMany({
-    orderBy: sortKey
-      ? {
-          [sortKey]: sortValue ?? "asc",
-        }
-      : {
-          createdAt: "desc",
-        },
-    skip: (Number(page) - 1) * Number(limit),
-    take: Number(limit),
-  });
+  const [allUser, count] = await Promise.all([
+    prisma.user.findMany({
+      orderBy: sortKey
+        ? {
+            [sortKey]: sortValue ?? "asc",
+          }
+        : {
+            createdAt: "desc",
+          },
+      skip: (Number(page) - 1) * Number(limit),
+      take: Number(limit),
+    }),
+    prisma.user.count(),
+  ]);
 
   return NextResponse.json({
     message: "User fetched successfully",
     data: allUser,
+    count,
   });
 }
 

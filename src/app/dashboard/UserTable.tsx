@@ -22,15 +22,17 @@ const UserTable = () => {
   //states
   const [user, setUser] = useState<IUser[] | []>([]);
   const [page, setPage] = useState<number>(1);
+  const [totalCount, setTotalCount] = useState<number>(1);
   const getUser = async () => {
-    const user = await getAllUser({ page, limit: 10 });
+    const user = await getAllUser({ page, limit: 8 });
     if (user) {
       setUser(user.data);
+      setTotalCount(user.count);
     }
   };
   useEffect(() => {
     getUser();
-  }, []);
+  }, [page]);
 
   const handleGenerateUser = async () => {
     const el = document.getElementById("refreshIcon");
@@ -147,7 +149,7 @@ const UserTable = () => {
       >
         <Paginations
           currPage={page}
-          noOfPages={10}
+          noOfPages={Math.ceil(totalCount / 8)}
           setPageId={setPage}
           refetch={getUser}
         />
