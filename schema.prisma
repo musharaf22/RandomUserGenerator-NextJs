@@ -1,18 +1,20 @@
-
-
 datasource db {
-    provider = "mongodb"
-    url      = 'mongodb+srv://musharaf:musharaf123@@cluster0.xiydpf8.mongodb.net/randomusers'
-  }
-  
-  generator client {
-    provider = "prisma-client-js"
-  }
+  provider = "mongodb"
+  url      = "mongodb+srv://musharaf:musharaf123@@cluster0.xiydpf8.mongodb.net/randomusers"
+}
 
+generator client {
+  provider = "prisma-client-js"
+}
 
-  // defining schema for user collection
-  model User {
-  id    String  @id @default(cuid())
-  email String  @unique
-  name  String?
+model User {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  email     String    @unique
+  firstName String?
+  lastName  String?
+  age       Int
+  location  String?
+  images    String[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
 }
