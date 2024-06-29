@@ -20,3 +20,10 @@ export const getAllUser = async (userProps: IUserFilter) => {
   });
   return await resp.json();
 };
+
+export const addUser = async () => {
+  const resp = await fetch("http://localhost:3000/api/user", {
+    method: "POST",
+  });
+  return await resp.json();
+};

@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { getAllUser, getRandomUser } from "./serverActions/action";
 import Paginations from "@/components/Paginations";
-import SortingIcon from "@/utils/logo/SortingIcon";
 import FilterIcon from "@/utils/logo/FilterIcon";
+import RefreshIcon from "@/utils/logo/RefreshIcon";
+import SortingIcon from "@/utils/logo/SortingIcon";
+import { useEffect, useState } from "react";
+import { addUser, getAllUser } from "./serverActions/action";
 
 interface IUser {
   id: string;
@@ -27,19 +28,39 @@ const UserTable = () => {
   useEffect(() => {
     getUser();
   }, []);
+
+  const handleGenerateUser = async () => {
+    const el = document.getElementById("refreshIcon");
+    console.log({ el });
+    if (el) {
+      el.classList.add("animate-spin");
+      await addUser();
+      await getUser();
+      el.classList.remove("animate-spin");
+    }
+  };
   return (
     <div className="border-2 border-gray-500 rounded-xl p-4">
       <div className="flex justify-end items-center mr-10 mb-4">
-        <button className="p-2 mr-4 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
+        <button
+          onClick={handleGenerateUser}
+          className="p-2 mr-4 flex items-center text-white bg-black rounded-lg  w-[190px] "
+        >
+          <p> Generate Random user </p>
+          <div id="refreshIcon" className="ml-4 ">
+            <RefreshIcon />
+          </div>
+        </button>
+        <button className="p-1 mr-4 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[80px] hover:border-2">
           <FilterIcon /> <p className="ml-2">Sort</p>
         </button>
-        <button className="p-2 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
+        <button className="p-1 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[80px] hover:border-2">
           <SortingIcon /> <p className="ml-2">Filter</p>
         </button>
       </div>
       <table className="w-full ">
         {/* // table heading  */}
-        <tr className="text-center p-2">
+        <tr className="text-center p-1">
           {[
             "SL",
             "Image",
@@ -51,7 +72,7 @@ const UserTable = () => {
             "Actions",
           ].map((e, i: number) => {
             return (
-              <th key={i} className="p-2">
+              <th key={i} className="p-1">
                 {e}
               </th>
             );
@@ -64,28 +85,28 @@ const UserTable = () => {
             <tr
               className={`text-center ${
                 (i + 1) % 2 === 0 ? "bg-gray-200" : "bg-white"
-              } p-2 `}
+              } p-1 `}
               key={u.id}
             >
-              <td className="p-2">{i + 1}</td>
-              <td className="p-2">
+              <td className="p-1">{i + 1}</td>
+              <td className="p-1">
                 <img
                   src={u.images[0]}
                   alt=""
-                  className="rounded-full w-[100px] h-[100px]  mx-auto"
+                  className="rounded-full w-[50px] h-[50px]  mx-auto"
                 />
               </td>
-              <td className="p-2">{u.firstName}</td>
-              <td className="p-2">{u.lastName}</td>
-              <td className="p-2">{u.email}</td>
-              <td className="p-2">{u.age}</td>
-              <td className="p-2">{u.location}</td>
-              <td className="p-2">
+              <td className="p-1">{u.firstName}</td>
+              <td className="p-1">{u.lastName}</td>
+              <td className="p-1">{u.email}</td>
+              <td className="p-1">{u.age}</td>
+              <td className="p-1">{u.location}</td>
+              <td className="p-1">
                 <div className="flex justify-evenly items-center">
-                  <button className="p-2 text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
+                  <button className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
                     Edit
                   </button>
-                  <button className="p-2 text-white bg-black rounded-lg hover:bg-white hover:text-black hover:border-2 w-[70px]">
+                  <button className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black hover:border-2 w-[70px]">
                     Delete
                   </button>
                 </div>
