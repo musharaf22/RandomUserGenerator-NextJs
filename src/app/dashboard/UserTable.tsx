@@ -1,6 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { getAllUser, getRandomUser } from "./serverActions/action";
+import Paginations from "@/components/Paginations";
+import SortingIcon from "@/utils/logo/SortingIcon";
+import FilterIcon from "@/utils/logo/FilterIcon";
 
 interface IUser {
   id: string;
@@ -25,7 +28,15 @@ const UserTable = () => {
     getUser();
   }, []);
   return (
-    <div>
+    <div className="border-2 border-gray-500 rounded-xl p-4">
+      <div className="flex justify-end items-center mr-10 mb-4">
+        <button className="p-2 mr-4 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
+          <FilterIcon /> <p className="ml-2">Sort</p>
+        </button>
+        <button className="p-2 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
+          <SortingIcon /> <p className="ml-2">Filter</p>
+        </button>
+      </div>
       <table className="w-full ">
         {/* // table heading  */}
         <tr className="text-center p-2">
@@ -37,6 +48,7 @@ const UserTable = () => {
             "Email",
             "Age",
             "Location",
+            "Actions",
           ].map((e, i: number) => {
             return (
               <th key={i} className="p-2">
@@ -51,7 +63,7 @@ const UserTable = () => {
           return (
             <tr
               className={`text-center ${
-                i + 1 / 2 === 0 ? "bg-slate-500" : "bg-white"
+                (i + 1) % 2 === 0 ? "bg-gray-200" : "bg-white"
               } p-2 `}
               key={u.id}
             >
@@ -68,10 +80,23 @@ const UserTable = () => {
               <td className="p-2">{u.email}</td>
               <td className="p-2">{u.age}</td>
               <td className="p-2">{u.location}</td>
+              <td className="p-2">
+                <div className="flex justify-evenly items-center">
+                  <button className="p-2 text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
+                    Edit
+                  </button>
+                  <button className="p-2 text-white bg-black rounded-lg hover:bg-white hover:text-black hover:border-2 w-[70px]">
+                    Delete
+                  </button>
+                </div>
+              </td>
             </tr>
           );
         })}
       </table>
+      <div className="flex justify-end">
+        <Paginations currPage={1} noOfPages={10} />
+      </div>
     </div>
   );
 };
