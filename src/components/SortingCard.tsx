@@ -1,9 +1,11 @@
 "use client";
-import React from "react";
+import React, { useRef, useState } from "react";
 
 const SortingCard = ({ setValue }: any) => {
+  const curValueRef = useRef<any>("");
   const handleChange = (e: any) => {
     const { value } = e.target;
+    curValueRef.current = value;
     if (value.includes("Increasing")) {
       setValue(() => {
         return { sortKey: "age", sortValue: "asc" };
@@ -36,6 +38,7 @@ const SortingCard = ({ setValue }: any) => {
                 name="sorting"
                 onChange={handleChange}
                 value={v}
+                checked={curValueRef.current === v}
               />
               <p className="ml-3">{v}</p>
             </div>
