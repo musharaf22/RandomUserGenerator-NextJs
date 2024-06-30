@@ -158,11 +158,8 @@ const UserTable = () => {
           </div>
         </div>
         {/* //Loading   */}
-        {user.length === 0 && loading && (
-          <Loading />
-          // </div>
-        )}
-        {user.length > 0 && !loading && (
+        {loading && <Loading />}
+        {!loading && (
           <table className="w-full ">
             {/* // table heading  */}
             <tbody>
