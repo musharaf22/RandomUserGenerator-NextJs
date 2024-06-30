@@ -1,4 +1,7 @@
 "use server";
+
+import prisma from "@/utils/prismaClient";
+
 interface IUserFilter {
   page: number;
   limit: number;
@@ -26,4 +29,10 @@ export const addUser = async () => {
     method: "POST",
   });
   return await resp.json();
+};
+
+export const deleteData = async (id: string): Promise<boolean> => {
+  const del = await prisma.user.delete({ where: { id: id } });
+  console.log({ del });
+  return true;
 };

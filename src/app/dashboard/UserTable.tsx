@@ -4,7 +4,7 @@ import FilterIcon from "@/utils/logo/FilterIcon";
 import RefreshIcon from "@/utils/logo/RefreshIcon";
 import SortingIcon from "@/utils/logo/SortingIcon";
 import { useEffect, useState } from "react";
-import { addUser, getAllUser } from "./serverActions/action";
+import { addUser, deleteData, getAllUser } from "./serverActions/action";
 import Swal from "sweetalert2";
 
 interface IUser {
@@ -46,7 +46,7 @@ const UserTable = () => {
   };
 
   // handle delete
-  const handleDelete = async () => {
+  const handleDelete = async (id: string) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -55,12 +55,15 @@ const UserTable = () => {
       confirmButtonColor: "black",
       cancelButtonColor: "gray",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
+        await deleteData(id);
+        await getUser();
         Swal.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
           icon: "success",
+          confirmButtonColor: "black",
         });
       }
     });
@@ -133,7 +136,7 @@ const UserTable = () => {
                     Edit
                   </button>
                   <button
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(u.id)}
                     className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black hover:border-2 w-[70px]"
                   >
                     Delete
