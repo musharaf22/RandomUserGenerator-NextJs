@@ -24,6 +24,7 @@ export interface IUser {
 }
 const UserTable = () => {
   //states
+  const [loading, setLoading] = useState<boolean>();
   const [user, setUser] = useState<IUser[] | []>([]);
   const [page, setPage] = useState<number>(1);
   const [totalCount, setTotalCount] = useState<number>(1);
@@ -38,6 +39,7 @@ const UserTable = () => {
   }>({ sortKey: null, sortValue: null });
 
   const getUser = async () => {
+    setLoading(true);
     const user = await getAllUser({
       page,
       limit: 8,
@@ -49,6 +51,7 @@ const UserTable = () => {
       setUser(user.data);
       setTotalCount(user.count);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -155,11 +158,11 @@ const UserTable = () => {
           </div>
         </div>
         {/* //Loading   */}
-        {user.length === 0 && (
+        {user.length === 0 && loading && (
           <Loading />
           // </div>
         )}
-        {user.length > 0 && (
+        {user.length > 0 && !loading && (
           <table className="w-full ">
             {/* // table heading  */}
             <tbody>
