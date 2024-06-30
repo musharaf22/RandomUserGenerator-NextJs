@@ -95,6 +95,7 @@ const UserTable = () => {
         <EditModal
           handleClose={() => setShowEditModal(false)}
           userDetails={editableValue}
+          getUser={getUser}
         />
       )}
       <div

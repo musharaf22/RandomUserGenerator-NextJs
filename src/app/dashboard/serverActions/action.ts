@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/utils/prismaClient";
+import { IUser } from "../UserTable";
 
 interface IUserFilter {
   page: number;
@@ -37,7 +38,17 @@ export const addUser = async () => {
 };
 
 export const deleteData = async (id: string): Promise<boolean> => {
-  const del = await prisma.user.delete({ where: { id: id } });
-  console.log({ del });
+  await prisma.user.delete({ where: { id: id } });
+  return true;
+};
+
+export const updateUser = async (
+  data: Partial<IUser>,
+  id: string
+): Promise<boolean> => {
+  await prisma.user.update({
+    where: { id },
+    data,
+  });
   return true;
 };
