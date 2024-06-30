@@ -10,3 +10,7 @@
 body{
     font-size: 13px;
 }
+
+.activePagination{
+    background-color: black !important;
+}

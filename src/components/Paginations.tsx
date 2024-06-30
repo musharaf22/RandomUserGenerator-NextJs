@@ -63,7 +63,7 @@ const Paginations = ({ currPage, setPageId, noOfPages, refetch }: Ipage) => {
         marginPagesDisplayed={3}
         pageClassName="px-3 py-1 text-[#333] rounded-[4px] md:mx-2 z-10 bg-white font-bold text-[#333  inline-flex items-center justify-center border text-sm "
         containerClassName="scale-[60%] w-fit md:scale-100 md:w-fit  text-blue-500 font-bold flex items-center justify-center"
-        activeClassName="text-[#ffff] z-10 bg-[#000] font-bold text-[#333] inline-flex items-center  border text-sm"
+        activeClassName="text-[#ffff] z-10 !bg-[#0000] font-bold  inline-flex items-center  border text-sm activePagination"
         previousClassName={
           currPage === 1
             ? "mr-2 px-3 py-1 rounded-[4px] bg-white text-gray-400 cursor-not-allowed opacity-[0.5]"
