@@ -36,6 +36,7 @@ const SortingCard = ({ setValue }: any) => {
               <input
                 type="radio"
                 name="sorting"
+                id="sorting"
                 onChange={handleChange}
                 value={v}
                 checked={curValueRef.current === v}

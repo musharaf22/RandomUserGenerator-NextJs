@@ -7,6 +7,7 @@ import SortingIcon from "@/utils/logo/SortingIcon";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { addUser, deleteData, getAllUser } from "./serverActions/action";
+import FilterCard from "@/components/FilterCard";
 
 interface IUser {
   id: string;
@@ -25,6 +26,8 @@ const UserTable = () => {
   const [page, setPage] = useState<number>(1);
   const [totalCount, setTotalCount] = useState<number>(1);
   const [showSortingCard, setShowSortingCard] = useState<boolean>(false);
+  const [showFilterCard, setShowFilterCard] = useState<boolean>(false);
+  const [filter, setFilter] = useState<boolean>(false);
   const [sortingValues, setSortingValues] = useState<{
     sortKey: string | null;
     sortValue: string | null;
@@ -36,6 +39,7 @@ const UserTable = () => {
       limit: 8,
       sortKey: sortingValues.sortKey,
       sortValue: sortingValues.sortValue,
+      filter: filter,
     });
     if (user) {
       setUser(user.data);
@@ -45,7 +49,7 @@ const UserTable = () => {
 
   useEffect(() => {
     getUser();
-  }, [page, sortingValues]);
+  }, [page, sortingValues, filter]);
 
   const handleGenerateUser = async () => {
     const el = document.getElementById("refreshIcon");
@@ -86,6 +90,7 @@ const UserTable = () => {
       className="border-2 border-gray-500 rounded-xl p-4"
       onClick={() => {
         setShowSortingCard(false);
+        setShowFilterCard(false);
       }}
     >
       <div className="flex justify-end items-center mr-10 mb-4">
@@ -102,6 +107,7 @@ const UserTable = () => {
           <button
             onClick={(e) => {
               e.stopPropagation();
+              setShowFilterCard(false);
               setShowSortingCard((prev) => !prev);
             }}
             className="p-1 mr-4 flex items-center text-white bg-black rounded-lg "
@@ -114,9 +120,24 @@ const UserTable = () => {
             </div>
           )}
         </div>
-        <button className="p-1 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[80px] hover:border-2">
-          <SortingIcon /> <p className="ml-2">Filter</p>
-        </button>
+        {/* // Filter button  */}
+        <div className="relative">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowSortingCard(false);
+              setShowFilterCard((prev) => !prev);
+            }}
+            className="p-1 flex items-center text-white bg-black rounded-lg"
+          >
+            <SortingIcon /> <p className="ml-2">Filter</p>
+          </button>
+          {showFilterCard && (
+            <div className="absolute right-0">
+              <FilterCard setValue={setFilter} />
+            </div>
+          )}
+        </div>
       </div>
       <table className="w-full ">
         {/* // table heading  */}

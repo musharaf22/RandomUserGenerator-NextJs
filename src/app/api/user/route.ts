@@ -4,13 +4,17 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const searchParams = new URLSearchParams(url.searchParams);
-  const [page = 1, limit = 10, sortKey, sortValue] = [
+  let [page = 1, limit = 10, sortKey, sortValue, filter] = [
     searchParams.get("page") ?? 1,
     searchParams.get("limit") ?? 10,
     searchParams.get("sortKey") ?? null,
     searchParams.get("sortValue") ?? null,
+    searchParams.get("filter") ?? null,
   ];
-
+  if (filter) {
+    limit = 2;
+    (sortKey = "age"), (sortValue = "asc");
+  }
   const [allUser, count] = await Promise.all([
     prisma.user.findMany({
       orderBy: sortKey
@@ -29,7 +33,7 @@ export async function GET(req: Request) {
   return NextResponse.json({
     message: "User fetched successfully",
     data: allUser,
-    count,
+    count: filter ? 2 : count,
   });
 }
 
