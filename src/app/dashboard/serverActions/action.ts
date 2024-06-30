@@ -5,8 +5,8 @@ import prisma from "@/utils/prismaClient";
 interface IUserFilter {
   page: number;
   limit: number;
-  sortKey?: string;
-  sortValue?: string;
+  sortKey?: string | null;
+  sortValue?: string | null;
 }
 export const getRandomUser = async () => {
   const resp = await fetch("https://randomuser.me/api");
@@ -16,7 +16,12 @@ export const getRandomUser = async () => {
 };
 
 //Get All user
-export const getAllUser = async (userProps: IUserFilter) => {
+export const getAllUser = async (userProps: IUserFilter | any) => {
+  Object.entries(userProps).forEach(([key, value]) => {
+    if (!value) {
+      delete userProps[key];
+    }
+  });
   const searchParam = new URLSearchParams(Object.entries(userProps)).toString();
   const resp = await fetch(`http://localhost:3000/api/user?${searchParam}`, {
     method: "GET",

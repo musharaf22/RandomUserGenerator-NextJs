@@ -1,11 +1,12 @@
 "use client";
 import Paginations from "@/components/Paginations";
+import SortingCard from "@/components/SortingCard";
 import FilterIcon from "@/utils/logo/FilterIcon";
 import RefreshIcon from "@/utils/logo/RefreshIcon";
 import SortingIcon from "@/utils/logo/SortingIcon";
 import { useEffect, useState } from "react";
-import { addUser, deleteData, getAllUser } from "./serverActions/action";
 import Swal from "sweetalert2";
+import { addUser, deleteData, getAllUser } from "./serverActions/action";
 
 interface IUser {
   id: string;
@@ -23,16 +24,28 @@ const UserTable = () => {
   const [user, setUser] = useState<IUser[] | []>([]);
   const [page, setPage] = useState<number>(1);
   const [totalCount, setTotalCount] = useState<number>(1);
+  const [showSortingCard, setShowSortingCard] = useState<boolean>(false);
+  const [sortingValues, setSortingValues] = useState<{
+    sortKey: string | null;
+    sortValue: string | null;
+  }>({ sortKey: null, sortValue: null });
+
   const getUser = async () => {
-    const user = await getAllUser({ page, limit: 8 });
+    const user = await getAllUser({
+      page,
+      limit: 8,
+      sortKey: sortingValues.sortKey,
+      sortValue: sortingValues.sortValue,
+    });
     if (user) {
       setUser(user.data);
       setTotalCount(user.count);
     }
   };
+
   useEffect(() => {
     getUser();
-  }, [page]);
+  }, [page, sortingValues]);
 
   const handleGenerateUser = async () => {
     const el = document.getElementById("refreshIcon");
@@ -69,7 +82,12 @@ const UserTable = () => {
     });
   };
   return (
-    <div className="border-2 border-gray-500 rounded-xl p-4">
+    <div
+      className="border-2 border-gray-500 rounded-xl p-4"
+      onClick={() => {
+        setShowSortingCard(false);
+      }}
+    >
       <div className="flex justify-end items-center mr-10 mb-4">
         <button
           onClick={handleGenerateUser}
@@ -80,9 +98,22 @@ const UserTable = () => {
             <RefreshIcon />
           </div>
         </button>
-        <button className="p-1 mr-4 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[80px] hover:border-2">
-          <FilterIcon /> <p className="ml-2">Sort</p>
-        </button>
+        <div className="relative">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowSortingCard((prev) => !prev);
+            }}
+            className="p-1 mr-4 flex items-center text-white bg-black rounded-lg "
+          >
+            <FilterIcon /> <p className="ml-2">Sort</p>
+          </button>
+          {showSortingCard && (
+            <div className="absolute -left-4">
+              <SortingCard setValue={setSortingValues} />
+            </div>
+          )}
+        </div>
         <button className="p-1 flex items-center text-white bg-black rounded-lg hover:bg-white hover:text-black w-[80px] hover:border-2">
           <SortingIcon /> <p className="ml-2">Filter</p>
         </button>
