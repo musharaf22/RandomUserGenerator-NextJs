@@ -89,63 +89,65 @@ const UserTable = () => {
       </div>
       <table className="w-full ">
         {/* // table heading  */}
-        <tr className="text-center p-1">
-          {[
-            "SL",
-            "Image",
-            "First Name",
-            "Last Name",
-            "Email",
-            "Age",
-            "Location",
-            "Actions",
-          ].map((e, i: number) => {
+        <tbody>
+          <tr className="text-center p-1">
+            {[
+              "SL",
+              "Image",
+              "First Name",
+              "Last Name",
+              "Email",
+              "Age",
+              "Location",
+              "Actions",
+            ].map((e, i: number) => {
+              return (
+                <th key={i} className="p-1">
+                  {e}
+                </th>
+              );
+            })}
+          </tr>
+          {/* // Table content  */}
+
+          {user.map((u: IUser, i: number) => {
             return (
-              <th key={i} className="p-1">
-                {e}
-              </th>
+              <tr
+                className={`text-center ${
+                  (i + 1) % 2 === 0 ? "bg-gray-200" : "bg-white"
+                } p-1 `}
+                key={u.id}
+              >
+                <td className="p-1">{i + 1}</td>
+                <td className="p-1">
+                  <img
+                    src={u.images[0]}
+                    alt=""
+                    className="rounded-full w-[50px] h-[50px]  mx-auto"
+                  />
+                </td>
+                <td className="p-1">{u.firstName}</td>
+                <td className="p-1">{u.lastName}</td>
+                <td className="p-1">{u.email}</td>
+                <td className="p-1">{u.age}</td>
+                <td className="p-1">{u.location}</td>
+                <td className="p-1">
+                  <div className="flex justify-evenly items-center">
+                    <button className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(u.id)}
+                      className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black hover:border-2 w-[70px]"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
             );
           })}
-        </tr>
-        {/* // Table content  */}
-
-        {user.map((u: IUser, i: number) => {
-          return (
-            <tr
-              className={`text-center ${
-                (i + 1) % 2 === 0 ? "bg-gray-200" : "bg-white"
-              } p-1 `}
-              key={u.id}
-            >
-              <td className="p-1">{i + 1}</td>
-              <td className="p-1">
-                <img
-                  src={u.images[0]}
-                  alt=""
-                  className="rounded-full w-[50px] h-[50px]  mx-auto"
-                />
-              </td>
-              <td className="p-1">{u.firstName}</td>
-              <td className="p-1">{u.lastName}</td>
-              <td className="p-1">{u.email}</td>
-              <td className="p-1">{u.age}</td>
-              <td className="p-1">{u.location}</td>
-              <td className="p-1">
-                <div className="flex justify-evenly items-center">
-                  <button className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black w-[70px] hover:border-2">
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(u.id)}
-                    className="p-1 text-white bg-black rounded-lg hover:bg-white hover:text-black hover:border-2 w-[70px]"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          );
-        })}
+        </tbody>
       </table>
       <div
         className={`${user.length === 0 ? "hidden" : "block"} flex justify-end`}
