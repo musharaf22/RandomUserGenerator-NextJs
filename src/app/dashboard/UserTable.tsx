@@ -156,9 +156,8 @@ const UserTable = () => {
         </div>
         {/* //Loading   */}
         {user.length === 0 && (
-          <div className="w-[100vw] h-[50vh]">
-            <Loading />
-          </div>
+          <Loading />
+          // </div>
         )}
         {user.length > 0 && (
           <table className="w-full ">
